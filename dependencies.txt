@@ -2,3 +2,4 @@ tqdm
 pandas
 pydicom
 numpy
+pillow
