@@ -4,7 +4,7 @@ This project represents a Toolkit for Marking Medical Images with NLP
 ## Installation
 
 ```commandline
-pip install git+https://github.com/nicolay-r/mmi-kit@master
+pip install --force-reinstall git+https://github.com/nicolay-r/mmi-kit@master
 ```
 
 ## Organizations
