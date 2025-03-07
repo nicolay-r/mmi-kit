@@ -5,12 +5,7 @@ from os.path import dirname, exists, join
 class OsService(object):
 
     @staticmethod
-    def replace_extension_with(filepath, ext):
-        assert ('.' not in ext)
-        return "{f}.{ext}".format(f=".".join(filepath.split('.')[:-1]), ext=ext)
-
-    @staticmethod
-    def _iter_dir_filepaths(from_dir, filter_full_path=None):
+    def __iter_dir_filepaths(from_dir, filter_full_path):
         assert (isinstance(from_dir, str))
 
         for root, _, files in os.walk(from_dir):
@@ -22,16 +17,20 @@ class OsService(object):
                 yield full_path
 
     @staticmethod
-    def iter_prefix_filepaths(from_prefix, filter_full_path=None):
+    def replace_extension_with(filepath, ext):
+        assert ('.' not in ext)
+        return "{f}.{ext}".format(f=".".join(filepath.split('.')[:-1]), ext=ext)
+
+    @staticmethod
+    def iter_prefix_filepaths(from_prefix):
         assert (isinstance(from_prefix, str))
-        print(dirname(from_prefix))
-        return OsService._iter_dir_filepaths(
+        return OsService.__iter_dir_filepaths(
             from_dir=dirname(from_prefix),
             filter_full_path=lambda full_path: full_path.startswith(from_prefix))
 
     @staticmethod
-    def iter_dir_filepaths(from_dir, filter_full_path):
-        return OsService._iter_dir_filepaths(from_dir, filter_full_path)
+    def iter_dir_filepaths(from_dir, filter_full_path=None):
+        return OsService.__iter_dir_filepaths(from_dir, filter_full_path)
 
     @staticmethod
     def create_dir_if_not_exists(filepath, is_dir=False):
