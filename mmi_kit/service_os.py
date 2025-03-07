@@ -22,11 +22,12 @@ class OsService(object):
         return "{f}.{ext}".format(f=".".join(filepath.split('.')[:-1]), ext=ext)
 
     @staticmethod
-    def iter_prefix_filepaths(from_prefix):
+    def iter_prefix_filepaths(from_prefix, filter_full_path=None):
         assert (isinstance(from_prefix, str))
+        filter_full_path = lambda fp: True if filter_full_path is None else filter_full_path
         return OsService.__iter_dir_filepaths(
             from_dir=dirname(from_prefix),
-            filter_full_path=lambda full_path: full_path.startswith(from_prefix))
+            filter_full_path=lambda full_path: full_path.startswith(from_prefix) and filter_full_path(full_path))
 
     @staticmethod
     def iter_dir_filepaths(from_dir, filter_full_path=None):
