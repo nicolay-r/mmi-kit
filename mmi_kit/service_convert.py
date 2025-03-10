@@ -6,6 +6,7 @@ from pydicom.uid import ImplicitVRLittleEndian
 
 def nifti_to_dicom(patient_id, patient_name, modality, image_matrix, age,
                    study_description="", ohif_description="",
+                   frame_of_reference_uid=None,
                    series_instance_uid=None, sop_instance_uid=None, study_instance_uid=None):
     assert (isinstance(age, int) and age > 0)
     assert (isinstance(patient_name, str))
@@ -29,6 +30,7 @@ def nifti_to_dicom(patient_id, patient_name, modality, image_matrix, age,
     ds.SeriesInstanceUID = pydicom.uid.generate_uid() if series_instance_uid is None else series_instance_uid
     ds.SOPInstanceUID = pydicom.uid.generate_uid() if sop_instance_uid is None else sop_instance_uid
     ds.StudyInstanceUID = pydicom.uid.generate_uid() if study_instance_uid is None else study_instance_uid
+    ds.FrameOfReferenceUID = pydicom.uid.generate_uid() if frame_of_reference_uid is None else study_instance_uid
 
     ds.add(DataElement(0x00081030, 'LO', study_description))
     ds.add(DataElement(0x0008103E, 'LO', ohif_description))
