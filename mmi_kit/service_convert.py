@@ -1,10 +1,13 @@
 import pydicom
+from pydicom import DataElement
 from pydicom.data import get_testdata_file
 from pydicom.uid import ImplicitVRLittleEndian
 
 
-def nifti_to_dicom(patient_id, patient_name, modality, image_matrix,
-                   series_instance_uid=None, sop_instance_uid=None, studiy_instance_uid=None):
+def nifti_to_dicom(patient_id, patient_name, modality, image_matrix, age,
+                   study_description="", ohif_description="",
+                   series_instance_uid=None, sop_instance_uid=None, study_instance_uid=None):
+    assert (isinstance(age, int) and age > 0)
     assert (isinstance(patient_name, str))
     assert (isinstance(patient_id, str))
     assert (isinstance(modality, str))
@@ -25,7 +28,11 @@ def nifti_to_dicom(patient_id, patient_name, modality, image_matrix,
     ds.Modality = modality
     ds.SeriesInstanceUID = pydicom.uid.generate_uid() if series_instance_uid is None else series_instance_uid
     ds.SOPInstanceUID = pydicom.uid.generate_uid() if sop_instance_uid is None else sop_instance_uid
-    ds.StudyInstanceUID = pydicom.uid.generate_uid() if studiy_instance_uid is None else studiy_instance_uid
+    ds.StudyInstanceUID = pydicom.uid.generate_uid() if study_instance_uid is None else study_instance_uid
+
+    ds.add(DataElement(0x00100010, 'AS', str(age).rjust(3, "0") + "Y"))
+    ds.add(DataElement(0x00081030, 'LO', study_description))
+    ds.add(DataElement(0x0008103E, 'LO', ohif_description))
 
     ds.file_meta.TransferSyntaxUID = ImplicitVRLittleEndian
     ds.Rows = image_matrix.shape[0]
