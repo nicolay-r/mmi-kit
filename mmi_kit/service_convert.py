@@ -4,13 +4,9 @@ import pydicom
 from pydicom.uid import ImplicitVRLittleEndian
 
 
-current_dir = dirname(realpath(__file__))
-TEST_DATA_DIR = join(current_dir, "data")
+def dicom_to_nifti(arr, dcm_template_filepath):
 
-
-def dicom_to_nifti(arr):
-
-    ds = pydicom.dcmread(join(TEST_DATA_DIR, f"MR_small.dcm"))
+    ds = pydicom.dcmread(dcm_template_filepath)
 
     arr = arr.astype('uint16')
 
