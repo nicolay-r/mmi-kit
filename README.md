@@ -4,7 +4,7 @@ This project represents a Toolkit of essential services applicable in Marking Me
 
 ## Installation
 
-> NOTE: Although we list list `dependency.txt`, we see no specific reason for automatic installation of all these dependencies by default.
+> **NOTE:** Although we list list `dependency.txt`, we see no specific reason for automatic installation of all these dependencies by default.
 > This is due to both various scope of providing services and various scenarios of `mmi-kit` application.
 
 ```commandline
