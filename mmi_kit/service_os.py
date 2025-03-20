@@ -1,4 +1,5 @@
 import os
+import shutil
 from os.path import dirname, exists, join
 
 
@@ -53,3 +54,8 @@ class OsService(object):
         assert (isinstance(root_dir, str))
         for filepath in filepath_it:
             yield join(root_dir, filepath)
+
+    @staticmethod
+    def delete_directory_recursive(directory_path):
+        if os.path.exists(directory_path):
+            shutil.rmtree(directory_path)
