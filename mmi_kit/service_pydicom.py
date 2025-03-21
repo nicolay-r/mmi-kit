@@ -17,7 +17,15 @@ class PyDicomService(object):
             return None
 
     @staticmethod
-    def iter_frames_from_dataset(ds):
+    def __read_dataset(filepath, **kwargs):
+        return pydicom.dcmread(filepath)
+
+    @staticmethod
+    def read_dataset(filepath, **kwargs):
+        return PyDicomService.__read_dataset(filepath)
+
+    @staticmethod
+    def dataset_iter_frames(ds):
         if hasattr(ds, 'NumberOfFrames'):
             # Attempting to extract pixel data.
             pixel_data = PyDicomService._try_extract_pixel_data(ds)
@@ -31,16 +39,16 @@ class PyDicomService(object):
                 yield pixel_data
 
     @staticmethod
-    def iter_frames(filepaths):
+    def iter_frames(filepaths, **kwargs):
         assert (isinstance(filepaths, list))
         for filepath in filepaths:
-            dicom_dataset = pydicom.dcmread(filepath)
-            pixel_arrays_it = PyDicomService.iter_frames_from_dataset(dicom_dataset)
+            dicom_dataset = PyDicomService.__read_dataset(filepath, **kwargs)
+            pixel_arrays_it = PyDicomService.dataset_iter_frames(dicom_dataset)
             for ind, pixel_array in enumerate(pixel_arrays_it):
                 yield filepath, ind, pixel_array
 
     @staticmethod
-    def get_image_aspect_ratio(ds):
+    def dataset_get_image_aspect_ratio(ds):
         if 'PixelSpacing' in ds:
             pixel_spacing = ds.PixelSpacing
             row_spacing = float(pixel_spacing[0])
@@ -51,7 +59,7 @@ class PyDicomService(object):
             raise ValueError("PixelSpacing attribute not found in the DICOM dataset.")
 
     @staticmethod
-    def _iter_metadata_recursive(ds, suppress_wa=False):
+    def _dataset_iter_metadata_recursive(ds, suppress_wa=False):
 
         with warnings.catch_warnings():
 
@@ -66,15 +74,15 @@ class PyDicomService(object):
                 # Check if the element is a sequence (which can contain nested datasets)
                 if elem.VR == "SQ":
                     for i, seq_item in enumerate(elem.value):
-                        PyDicomService.iter_metadata_recursive(seq_item)
+                        PyDicomService.dataset_iter_metadata_recursive(seq_item)
                 elif isinstance(elem.value, bytes):
                     continue
                 else:
                     yield elem
 
     @staticmethod
-    def iter_metadata_recursive(ds, suppress_wa=False):
-        for data in PyDicomService._iter_metadata_recursive(ds=ds, suppress_wa=suppress_wa):
+    def dataset_iter_metadata_recursive(ds, suppress_wa=False):
+        for data in PyDicomService._dataset_iter_metadata_recursive(ds=ds, suppress_wa=suppress_wa):
             yield data
 
     @staticmethod
@@ -82,6 +90,6 @@ class PyDicomService(object):
         return {
             elem.description(): elem.value
             for elem in PyDicomService._iter_metadata_recursive(
-                ds=pydicom.dcmread(filepath),
+                ds=PyDicomService.__read_dataset(filepath, **kwargs),
                 suppress_wa=suppress_wa)
         }
