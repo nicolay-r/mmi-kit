@@ -1,3 +1,4 @@
+import io
 import warnings
 import pydicom
 
@@ -23,6 +24,16 @@ class PyDicomService(object):
     @staticmethod
     def read_dataset(filepath, **kwargs):
         return PyDicomService.__read_dataset(filepath)
+
+    @staticmethod
+    def dataset_modify_study(ds, study_uid):
+        ds.StudyInstanceUID = study_uid  # Assign the same Study Instance UID
+
+    @staticmethod
+    def dataset_to_bytes(ds):
+        with io.BytesIO() as bytes_io:
+            ds.save_as(bytes_io)
+            return bytes_io.getvalue()
 
     @staticmethod
     def dataset_iter_frames(ds):
