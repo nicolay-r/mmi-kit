@@ -11,7 +11,7 @@ from mmi_kit.service_pydicom import PyDicomService
 def dicom_to_png(dicom_path, png_path, scale=255.0, extra_brightness=0):
 
     # Read the DICOM file
-    ds = pydicom.dcmread(dicom_path)
+    ds = PyDicomService.read_dataset(dicom_path)
 
     # Extract the pixel array
     # Make sure that we convert to the float type to avoid quality loss during further transformations.
@@ -67,7 +67,7 @@ def nifti_to_dicom(patient_id, patient_name, modality, image_matrix, age,
         "MR": get_testdata_file("MR_small.dcm")
     }
 
-    ds = pydicom.dcmread(templates[modality.upper()])
+    ds = PyDicomService.read_dataset(templates[modality.upper()])
 
     image_matrix = image_matrix.astype('uint16')
 
