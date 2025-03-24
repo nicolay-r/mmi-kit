@@ -20,8 +20,10 @@ class ZipService(object):
             return ZipService.__read_inner_file(zip_file=zip_file, file_name=file_name)
 
     @staticmethod
-    def __iter_zip_contents(zip_file, filter_func):
+    def __iter_zip_contents(zip_file, filter_func, skip_dir=True):
         for file_name in zip_file.namelist():
+            if skip_dir and zip_file.getinfo(file_name).is_dir():
+                continue
             if filter_func(file_name):
                 yield file_name
 
