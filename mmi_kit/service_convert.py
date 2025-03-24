@@ -52,10 +52,6 @@ def nifti_to_dicom(patient_id, patient_name, modality, image_matrix, age,
                    study_description="", series_description="",
                    frame_of_reference_uid=None,
                    series_instance_uid=None, sop_instance_uid=None, study_instance_uid=None):
-    """ This is experimental approach. Not recommended to use.
-        The actual implementation is more difficult that this.
-    """
-
     assert (isinstance(age, int) and age > 0)
     assert (isinstance(patient_name, str))
     assert (isinstance(patient_id, str))
