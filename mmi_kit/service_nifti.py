@@ -39,7 +39,7 @@ class NiftiService(object):
 
     @staticmethod
     def save_image(array_slices, filename, src_nifti=None, **nifti2img_kwargs):
-        assert (isinstance(array_slices, np.narray))
+        assert (isinstance(array_slices, np.ndarray))
 
         if src_nifti is not None:
             img, _ = NiftiService.__read(src_nifti)
