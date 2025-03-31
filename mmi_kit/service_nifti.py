@@ -15,7 +15,6 @@ class NiftiService(object):
     def read_image(filepath, **kwargs):
         return NiftiService.__read_data(filepath, **kwargs)
 
-
     @staticmethod
     def iter_slices(filepath, handle_func=None, handle_kwargs=dict()):
         assert (isinstance(filepath, str))
@@ -38,7 +37,9 @@ class NiftiService(object):
         return header['descrip'].astype(str)
 
     @staticmethod
-    def save_image(array_slices, filename, **kwargs):
+    def save_image(array_slices, filename, affine=None, header=None, **kwargs):
         assert (isinstance(array_slices, np.ndarray))
-        img = nib.Nifti1Image(array_slices, affine=np.eye(4))
+        img = nib.Nifti1Image(array_slices,
+                              affine=np.eye(4) if affine is None else affine,
+                              header=header)
         nib.save(img, filename=filename, **kwargs)
