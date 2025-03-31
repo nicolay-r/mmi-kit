@@ -7,11 +7,20 @@ class NiftiService(object):
     """
 
     @staticmethod
+    def __read_data(filepath, **kwargs):
+        nifti_img = nib.load(filepath, **kwargs)
+        return nifti_img.get_fdata()
+
+    @staticmethod
+    def read_image(filepath, **kwargs):
+        return NiftiService.__read_data(filepath, **kwargs)
+
+
+    @staticmethod
     def iter_slices(filepath, handle_func=None, handle_kwargs=dict()):
         assert (isinstance(filepath, str))
 
-        nifti_img = nib.load(filepath)
-        nifti_data = nifti_img.get_fdata()
+        nifti_data = NiftiService.__read_data(filepath, **handle_kwargs)
 
         # Iterate over each slice in the z-dimension (axis 2)
         for slice_ind in range(nifti_data.shape[2]):
