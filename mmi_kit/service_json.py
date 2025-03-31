@@ -4,7 +4,7 @@ import json
 class JsonService(object):
 
     @staticmethod
-    def load(filepath):
+    def from_filepath(filepath):
         with open(filepath) as json_data:
             return json.load(json_data)
 
