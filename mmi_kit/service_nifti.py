@@ -1,7 +1,10 @@
 import nibabel as nib
+import numpy as np
 
 
 class NiftiService(object):
+    """ This Service class represent a wrapper over nibabel and numpy functionality.
+    """
 
     @staticmethod
     def iter_slices(filepath, handle_func=None, handle_kwargs=dict()):
@@ -24,3 +27,9 @@ class NiftiService(object):
         nifti_img = nib.load(filepath)
         header = nifti_img.header
         return header['descrip'].astype(str)
+
+    @staticmethod
+    def save_image(array_slices, filename, **kwargs):
+        assert (isinstance(array_slices, np.ndarray))
+        img = nib.Nifti1Image(array_slices, affine=np.eye(4))
+        nib.save(img, filename=filename, **kwargs)
