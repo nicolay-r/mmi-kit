@@ -93,14 +93,12 @@ class PyDicomService(object):
 
     @staticmethod
     def dataset_iter_metadata_recursive(ds, suppress_wa=False):
-        for data in PyDicomService._dataset_iter_metadata_recursive(ds=ds, suppress_wa=suppress_wa):
-            yield data
+        for elem in PyDicomService._dataset_iter_metadata_recursive(ds=ds, suppress_wa=suppress_wa):
+            yield elem
 
     @staticmethod
-    def get_metadata_dict(filepath, suppress_wa=False, elem_key_fun=lambda elem: elem.tag, **kwargs):
-        return {
-            elem.tag: elem.value
-            for elem in PyDicomService._dataset_iter_metadata_recursive(
+    def iter_metadata_dict(filepath, suppress_wa=False, **kwargs):
+        for elem in PyDicomService._dataset_iter_metadata_recursive(
                 ds=PyDicomService.__read_dataset(filepath, **kwargs),
-                suppress_wa=suppress_wa)
-        }
+                suppress_wa=suppress_wa):
+            yield elem
