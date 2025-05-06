@@ -85,7 +85,7 @@ class PyDicomService(object):
                 # Check if the element is a sequence (which can contain nested datasets)
                 if elem.VR == "SQ":
                     for i, seq_item in enumerate(elem.value):
-                        PyDicomService.dataset_iter_metadata_recursive(seq_item)
+                        PyDicomService._dataset_iter_metadata_recursive(seq_item, suppress_wa=suppress_wa)
                 elif isinstance(elem.value, bytes):
                     continue
                 else:
@@ -97,10 +97,10 @@ class PyDicomService(object):
             yield data
 
     @staticmethod
-    def get_metadata_dict(filepath, suppress_wa=False, **kwargs):
+    def get_metadata_dict(filepath, suppress_wa=False, elem_key_fun=lambda elem: elem.tag, **kwargs):
         return {
-            elem.description(): elem.value
-            for elem in PyDicomService._iter_metadata_recursive(
+            elem.tag: elem.value
+            for elem in PyDicomService._dataset_iter_metadata_recursive(
                 ds=PyDicomService.__read_dataset(filepath, **kwargs),
                 suppress_wa=suppress_wa)
         }
