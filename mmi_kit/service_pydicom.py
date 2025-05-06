@@ -97,7 +97,7 @@ class PyDicomService(object):
             yield elem
 
     @staticmethod
-    def iter_metadata_dict(filepath, suppress_wa=False, **kwargs):
+    def iter_metadata_recursive(filepath, suppress_wa=False, **kwargs):
         for elem in PyDicomService._dataset_iter_metadata_recursive(
                 ds=PyDicomService.__read_dataset(filepath, **kwargs),
                 suppress_wa=suppress_wa):
