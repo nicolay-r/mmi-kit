@@ -1,4 +1,4 @@
 pydicom==3.0.1
-numpy
-pillow
-nibabel
+numpy==2.2.3
+pillow==11.1.0
+nibabel==5.3.2
