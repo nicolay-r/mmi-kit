@@ -15,7 +15,7 @@ def get_requirements(filenames):
 
 setup(
     name='mmi_kit',
-    version='0.24.3',
+    version='0.25.5',
     python_requires=">=3.6",
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
